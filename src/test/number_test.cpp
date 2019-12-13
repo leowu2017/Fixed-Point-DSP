@@ -76,7 +76,7 @@ TEST(number, Mix32Base) {
     EXPECT_NEAR(targetF, n.value(), resolution);
     
     // fixed-point raw value
-    const double targetI = -1. / (static_cast<int64_t>(1) << (nFrac - nZero));
+    const double targetI = -1. / (static_cast<int64_t>(1) << (nFrac + nZero - nBase));
     n = with_raw_value(0xFFFF'FFF0);
     EXPECT_NEAR(targetI, n.value(), resolution);
 }
