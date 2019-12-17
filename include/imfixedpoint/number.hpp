@@ -98,6 +98,11 @@ namespace imfp
             check_valid_template();
         }
         
+        /// Copy constructor
+        sfp(sfp const &i) {
+            mVal = i.mVal;
+        }
+        
         /// Floating-point constructor
         /**
          * Initialize with a floating-point value.
@@ -134,7 +139,7 @@ namespace imfp
          * Get the floating-point value.
          * \return floating-point value
          */
-        sfp_float_t value() {
+        sfp_float_t value() const {
             static constexpr double r = 1. / (static_cast<int64_t>(1) << (nFrac + nZero - nBase));
             
             return mVal * r;
@@ -154,7 +159,7 @@ namespace imfp
          * Get the fixed-point raw value.
          * \return fixed-point raw value
          */
-        int64_t raw_value() {
+        int64_t raw_value() const {
             return mVal;
         }
 
