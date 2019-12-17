@@ -8,9 +8,6 @@
 #include <cmath>
 #include <imfixedpoint/imfp_exception.hpp>
 
-#include <iostream>
-using namespace std;
-
 namespace imfp
 {
     namespace {
@@ -75,13 +72,13 @@ namespace imfp
             // Check if every sign bits have the same value.
             if constexpr (nSgn > 1) {
                 if (invalid_sign_bits(val)) {
-                    throw invalid_sign_bits_exception();
+                    throw representation::invalid_sign_bits_exception();
                 }
             }
             
             if constexpr (nZero > 0) {
                 if (invalid_zero_bits(val)) {
-                    throw invalid_zero_bits_exception();
+                    throw representation::invalid_zero_bits_exception();
                 }
             }
 

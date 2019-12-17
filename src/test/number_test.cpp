@@ -13,7 +13,7 @@ TEST(number, Q15) {
     
     // Q15 check sign
     ASSERT_NO_THROW(n_1_15 = with_raw_value(0x7FFF));
-    ASSERT_THROW(n_2_14 = with_raw_value(0x7FFF), invalid_sign_bits_exception);
+    ASSERT_THROW(n_2_14 = with_raw_value(0x7FFF), representation::invalid_sign_bits_exception);
     ASSERT_NO_THROW(n_2_14 = with_raw_value(0x3FFF));
     
     // Q15 value
@@ -40,10 +40,10 @@ TEST(number, Mix24) {
     
     // check sign
     ASSERT_NO_THROW(n = with_raw_value(0x3FF'FFE));
-    ASSERT_THROW(n = with_raw_value(0x7FF'FFE), invalid_sign_bits_exception);
+    ASSERT_THROW(n = with_raw_value(0x7FF'FFE), representation::invalid_sign_bits_exception);
     
     // check zero
-    ASSERT_THROW(n = with_raw_value(0x3FF'FFF), invalid_zero_bits_exception);
+    ASSERT_THROW(n = with_raw_value(0x3FF'FFF), representation::invalid_zero_bits_exception);
     
     // floating-point value
     const double resolution = 1. / (static_cast<int64_t>(1) << nFrac);

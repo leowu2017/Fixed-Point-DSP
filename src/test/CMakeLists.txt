@@ -6,6 +6,7 @@ find_package(GTest REQUIRED)
 add_executable(
 	imfp_test
 	${CMAKE_CURRENT_LIST_DIR}/number_test.cpp
+	${CMAKE_CURRENT_LIST_DIR}/conversion_test.cpp
 	${CMAKE_CURRENT_LIST_DIR}/main.cpp
 )
 target_link_libraries(imfp_test GTest::GTest GTest::Main)
