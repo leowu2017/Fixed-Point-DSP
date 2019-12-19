@@ -66,7 +66,7 @@ TEST(number, Mix32Base) {
     const unsigned nFrac = 22;
     const unsigned nZero = 4;
     const int nBase = -2;
-    sfp<bit32, nSgn, nInt, nFrac, nZero, nBase> n; // 2.4.22.4 (2)
+    sfp<bit32, nSgn, nInt, nFrac, nZero, nBase> n; // 2.4.22.4(-2)
     
     // floating-point value
     const double resolution = 1. / (static_cast<int64_t>(1) << (nFrac - nZero));
@@ -79,4 +79,27 @@ TEST(number, Mix32Base) {
     const double targetI = -1. / (static_cast<int64_t>(1) << (nFrac + nZero - nBase));
     n = with_raw_value(0xFFFF'FFF0);
     EXPECT_NEAR(targetI, n.value(), resolution);
+}
+
+TEST(number, Extrema) {
+    // declare variables
+    const unsigned bit16 = 16;
+    const unsigned nSgn = 2;
+    const unsigned nInt = 4;
+    const unsigned nFrac = 6;
+    const unsigned nZero = 4;
+    const int nBase = -2;
+    using n_t = sfp<bit16, nSgn, nInt, nFrac, nZero, nBase>;
+    
+    n_t n; // 2.4.6.4(-2)
+    
+    // max
+    n = n_t::max;
+    n_t max{with_raw_value(0x3FF0)};
+    EXPECT_DOUBLE_EQ(max.value(), n.value());
+    
+    // min
+    n = n_t::min;
+    n_t min{with_raw_value(0xC000)};
+    EXPECT_DOUBLE_EQ(min.value(), n.value());
 }

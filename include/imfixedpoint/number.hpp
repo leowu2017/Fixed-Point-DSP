@@ -22,9 +22,7 @@ namespace imfp
         
         struct raw_val {
             int64_t mVal;
-            raw_val(int64_t val) {
-                mVal = val;
-            }
+            raw_val(int64_t val): mVal(val) {}
         };
     
         template<unsigned begin, unsigned end>
@@ -33,8 +31,27 @@ namespace imfp
         }
     }
 
+    /// Helper to assign floating-point value.
+    /**
+     * \fn double_val with_value(sfp_float_t val)
+     * \param val floating-point value
+    */
+    double_val with_value(sfp_float_t val) {
+        return val;
+    }
+
+    /// Helper to assign fixed-point raw value.
+    /**
+     * \fn raw_val with_raw_value(int64_t val)
+     * \param val fixed-point raw value
+    */
+    raw_val with_raw_value(int64_t val) {
+        return val;
+    }
+
     template<unsigned nBit, unsigned nSgn = 1, unsigned nInt = 0, unsigned nFrac = (nBit - nSgn - nInt), unsigned nZero = (nBit - nSgn - nInt - nFrac), int nBase = 0>
     class sfp {
+        // stored value
         int64_t mVal{0};
         
         void check_valid_template() const {
@@ -90,6 +107,13 @@ namespace imfp
         }
         
     public:
+        /// Type
+        using type = sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>;
+        /// Max value
+        static const type max;// = with_raw_value(generate_mask<nZero, (nInt + nFrac + nZero)>());
+        /// Min value
+        static const type min;// = with_raw_value(generate_mask<(nBit - nSgn), 64>());
+        
         /// Constructor
         /**
          * Default value is 0;
@@ -182,25 +206,37 @@ namespace imfp
             
             return *this;
         }
+        
+        template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
+        bool operator<(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
+            return value() < v.value();
+        }
+        
+        template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
+        bool operator<=(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
+            return value() <= v.value();
+        }
+        
+        template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
+        bool operator>(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
+            return value() > v.value();
+        }
+        
+        template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
+        bool operator>=(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
+            return value() >= v.value();
+        }
     };
 
-    /// Helper to assign floating-point value.
-    /**
-     * \fn double_val with_value(sfp_float_t val)
-     * \param val floating-point value
-    */
-    double_val with_value(sfp_float_t val) {
-        return val;
-    }
+    // initialize max
+    template<unsigned nBit, unsigned nSgn, unsigned nInt, unsigned nFrac, unsigned nZero, int nBase>
+    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::max = with_raw_value(generate_mask<nZero, (nInt + nFrac + nZero)>());
 
-    /// Helper to assign fixed-point raw value.
-    /**
-     * \fn raw_val with_raw_value(int64_t val)
-     * \param val fixed-point raw value
-    */
-    raw_val with_raw_value(int64_t val) {
-        return val;
-    }
+    // initialize min
+    template<unsigned nBit, unsigned nSgn, unsigned nInt, unsigned nFrac, unsigned nZero, int nBase>
+    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::min = with_raw_value(generate_mask<(nBit - nSgn), 64>());
+
+
 } // namespace imfp
 
 #endif // IMFP_NUMBER_HPP

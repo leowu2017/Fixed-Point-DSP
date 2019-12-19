@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.13.0)
 add_library(imfixedpoint INTERFACE)
 target_sources(imfixedpoint INTERFACE
     include/imfixedpoint/conversion.hpp
+    include/imfixedpoint/dsp.hpp
     include/imfixedpoint/imfp_exception.hpp
     include/imfixedpoint/number.hpp
 )
