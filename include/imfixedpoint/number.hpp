@@ -110,9 +110,11 @@ namespace imfp
         /// Type
         using type = sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>;
         /// Max value
-        static const type max;// = with_raw_value(generate_mask<nZero, (nInt + nFrac + nZero)>());
+        static constexpr int64_t max_raw = generate_mask<nZero, (nInt + nFrac + nZero)>();
+        static const type max;
         /// Min value
-        static const type min;// = with_raw_value(generate_mask<(nBit - nSgn), 64>());
+        static constexpr int64_t min_raw = generate_mask<(nBit - nSgn), 64>();
+        static const type min;
         
         /// Constructor
         /**
@@ -123,9 +125,7 @@ namespace imfp
         }
         
         /// Copy constructor
-        sfp(sfp const &i) {
-            mVal = i.mVal;
-        }
+        sfp(sfp const &i): mVal{i.mval} {}
         
         /// Floating-point constructor
         /**
@@ -207,21 +207,45 @@ namespace imfp
             return *this;
         }
         
+        /// Comparison (less than).
+        /**
+         * Overload operator<
+         * \param v target
+         * \return result
+         */
         template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
         bool operator<(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
             return value() < v.value();
         }
         
+        /// Comparison (less than or equal to).
+        /**
+         * Overload operator<=
+         * \param v target
+         * \return result
+         */
         template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
         bool operator<=(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
             return value() <= v.value();
         }
         
+        /// Comparison (greater than).
+        /**
+         * Overload operator>
+         * \param v target
+         * \return result
+         */
         template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
         bool operator>(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
             return value() > v.value();
         }
         
+        /// Comparison (greater than or equal to).
+        /**
+         * Overload operator>=
+         * \param v target
+         * \return result
+         */
         template<unsigned nBitT, unsigned nSgnT, unsigned nIntT, unsigned nFracT, unsigned nZeroT, int nBaseT>
         bool operator>=(sfp<nBitT, nSgnT, nIntT, nFracT, nZeroT, nBaseT> const &v) const {
             return value() >= v.value();
@@ -230,11 +254,11 @@ namespace imfp
 
     // initialize max
     template<unsigned nBit, unsigned nSgn, unsigned nInt, unsigned nFrac, unsigned nZero, int nBase>
-    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::max = with_raw_value(generate_mask<nZero, (nInt + nFrac + nZero)>());
+    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::max = with_raw_value(max_raw);
 
     // initialize min
     template<unsigned nBit, unsigned nSgn, unsigned nInt, unsigned nFrac, unsigned nZero, int nBase>
-    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::min = with_raw_value(generate_mask<(nBit - nSgn), 64>());
+    const sfp<nBit, nSgn, nInt, nFrac, nZero, nBase> sfp<nBit, nSgn, nInt, nFrac, nZero, nBase>::min = with_raw_value(min_raw);
 
 
 } // namespace imfp

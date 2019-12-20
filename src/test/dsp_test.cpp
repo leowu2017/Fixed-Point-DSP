@@ -38,3 +38,28 @@ TEST(dsp, Addition) {
     n_1_15_d = with_raw_value((decltype(n_1_15_c)::min).raw_value() * 2 + n_1_15_a.raw_value() + n_1_15_b.raw_value());
     EXPECT_NEAR(n_1_15_d.value(), n_1_15_c.value(), resolution);
 }
+
+TEST(dsp, Multiplication) {
+    // declare variables
+    const unsigned bit16 = 16;
+    const unsigned bit32 = bit16 * 2;
+    sfp<bit16> n_1_15_a;
+    sfp<bit16> n_1_15_b;
+    sfp<bit32, 1, 0, 30, 1> n_1_0_30_1;
+    sfp<bit32, 2> n_2_0_31_0;
+    const double resolution = 1. / (static_cast<int64_t>(1) << (bit16 - 1));
+    
+    // multiplication
+    double targetA = 0.1, targetB = 0.3;
+    n_1_15_a = with_value(targetA);
+    n_1_15_b = with_value(targetB);
+    n_1_0_30_1 = multiply<bit32, 1, 0, 30, 1>(n_1_15_a, n_1_15_b);
+    EXPECT_NEAR(targetA * targetB, n_1_0_30_1.value(), resolution);
+    
+    targetA = 0.6;
+    targetB = 0.5;
+    n_1_15_a = with_value(targetA);
+    n_1_15_b = with_value(targetB);
+    n_2_0_31_0 = multiply<bit32, 2>(n_1_15_a, n_1_15_b);
+    EXPECT_NEAR(targetA * targetB, n_2_0_31_0.value(), resolution);
+}

@@ -17,14 +17,14 @@ TEST(number, Q15) {
     ASSERT_NO_THROW(n_2_14 = with_raw_value(0x3FFF));
     
     // Q15 value
-    const double resolution = 1. / (static_cast<int64_t>(1) << (bit16 - 1));
+    const double resolution = 1. / (static_cast<int64_t>(1) << bit16);
     const double targetF = -0.1;
     n_1_15 = with_value(targetF);
     
     EXPECT_NEAR(targetF, n_1_15.value(), resolution);
     
     // Q15 raw value
-    const double targetI = -1. / (static_cast<int64_t>(1) << (bit16 - 1));
+    const double targetI = -1. / (static_cast<int64_t>(1) << bit16);
     n_1_15 = with_raw_value(0xFFFF);
     EXPECT_NEAR(targetI, n_1_15.value(), resolution);
 }
